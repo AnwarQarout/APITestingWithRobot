@@ -9,7 +9,7 @@ Get_200_URLs = ["https://reqres.in/api/users?page=2", "https://reqres.in/api/use
 
 Get_404_URLs = ["https://reqres.in/api/users/23", "https://reqres.in/api/unknown/23"]
 
-Post_201_URLs = [("https://reqres.in/api/users", {"name": "anwar", "job": "leader"})]
+Post_201_URLs = [("https://reqres.in/api/users", {"first_name": "anwar", "job": "leader"})]
 
 Post_200_URLs = [("https://reqres.in/api/register", {
     "email": "eve.holt@reqres.in",
@@ -41,6 +41,8 @@ class TestAPI(unittest.TestCase):
                 self.assertEqual(status_return(response), 404)
                 self.assertEqual(status_text_return(response), "Request is not successful")
 
+
+
     def test_post_requests(self):
         for row in Post_200_URLs:
             response = requests.post(row[0], json=row[1])
@@ -53,6 +55,9 @@ class TestAPI(unittest.TestCase):
             with self.subTest():
                 self.assertEqual(status_return(response), 201)
                 self.assertEqual(status_text_return(response), "Request is successful")
+            response=requests.get("https://reqres.in/api/users?first_name=anwar")
+            self.assertEqual(status_return(response),200)
+            self.assertIn("'first_name': 'anwar'",json_printer(response))
 
         for row in Post_400_URLs:
             response = requests.post(row[0], json=row[1])
@@ -60,15 +65,21 @@ class TestAPI(unittest.TestCase):
                 self.assertEqual(status_return(response), 400)
                 self.assertEqual(status_text_return(response), "Request is not successful")
 
+
+
     def test_put_requests(self):
         response = requests.post("https://reqres.in/api/users/2", json={"name": "anwar", "job": "Automation"})
         self.assertEqual(status_return(response), 200)
         self.assertEqual(status_text_return(response), "Request is successful")
 
+
+
     def test_patch_requests(self):
         response = requests.patch("https://reqres.in/api/users/2", json={"name": "anwar", "job": "Automation Testing"})
         self.assertEqual(status_return(response), 200)
         self.assertEqual(status_text_return(response), "Request is successful")
+
+
 
     def test_delete_requests(self):
         response = requests.delete("https://reqres.in/api/users/2", json={"name": "anwar", "job": "Automation Testing"})

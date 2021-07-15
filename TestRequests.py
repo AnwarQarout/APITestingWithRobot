@@ -20,6 +20,7 @@ def status_return(response):
 def json_printer(response):
     print("---Printing Json Response...---")
     print(response.json())
+    return response.json()
 
 
 def headers_printer(response):
@@ -83,7 +84,7 @@ status_return(response)
 
 print("\n\n")"""
 
-"""
+
 print("-------- Sending POST request https://reqres.in/api/users --------")
 response = requests.post("https://reqres.in/api/users", json={"name": "anwar", "job": "leader"})
 json_printer(response)
@@ -91,6 +92,13 @@ headers_printer(response)
 status_return(response)
 
 print("\n\n")
+
+print("RIGHT HERE")
+response = requests.get("https://reqres.in/api/users?first_name=anwar")
+json_printer(response)
+headers_printer(response)
+status_return(response)
+"""
 
 print("-------- Sending POST request https://reqres.in/api/register --------")
 response = requests.post("https://reqres.in/api/register", json={
