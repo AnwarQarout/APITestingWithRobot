@@ -1,0 +1,26 @@
+properties([parameters([choice(choices: ['all', 'get', 'post', 'put', 'patch', 'delete'], description: 'Select which tests you would like to execute.', name: 'test_type')])])
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+                echo "executing users choice ${params.test_type}"
+            }
+        }
+        stage('Build') {
+            steps {
+                git branch: 'master', url: 'https://github.com/AnwarQarout/APITesting1.git'
+                script{
+                    if("${params.test_type}" == "all"){
+                        bat "python -m unittest discover Testing"
+                    }
+                    else{
+                    bat "python -m unittest Testing/test_${params.test_type}_requests.py"
+                    }
+                }
+            }
+        }
+
+    }
+}
